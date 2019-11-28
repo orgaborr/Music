@@ -52,12 +52,9 @@ public class DataSource {
 	
 	public List<Artist> queryArtists() {
 		
-		Statement statement = null;
-		ResultSet results = null;
-		
-		try {
-			statement = conn.createStatement();
-			results = statement.executeQuery("SELECT * FROM " + TABLE_ARTISTS);
+		try(Statement statement = conn.createStatement();
+			ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_ARTISTS)) {
+			
 			
 			List<Artist> artists = new ArrayList();
 			while(results.next()) {
@@ -72,23 +69,7 @@ public class DataSource {
 		} catch(SQLException e) {
 			System.out.println("Query failed: " + e.getMessage());
 			return null;
-		} finally {
-			try {
-				if(results != null) {
-					results.close();
-				}
-			} catch(SQLException e) {
-				System.out.println("Error in closing ResultSet: " + e.getMessage());
-			}
-			try {
-				if(statement != null) {
-					statement.close();
-				}
-			} catch(SQLException e) {
-				System.out.println("Error in closing Statement: " + e.getMessage());
-			}
+		
 		}
 	}
-	
-	
 }
